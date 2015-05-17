@@ -1,8 +1,7 @@
 package com.racho.tictactoe;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.racho.tictactoe.lobby.logic.Lobby;
+import com.hubspot.dropwizard.guice.GuiceBundle;
+import com.racho.tictactoe.lobby.service.LobbyResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -11,12 +10,11 @@ import io.dropwizard.setup.Environment;
  * Created by aron on 5/15/15.
  */
 public class TicTacToeApplication extends Application<TicTacToeConfiguration> {
+
+    private GuiceBundle<TicTacToeConfiguration> guiceBundle;
+
+
     public static void main(String[] args) throws Exception {
-
-
-        Injector injector = Guice.createInjector(new LiveModule());
-        Lobby x = injector.getInstance( Lobby.class );
-
         new TicTacToeApplication().run(args);
     }
 
@@ -28,16 +26,17 @@ public class TicTacToeApplication extends Application<TicTacToeConfiguration> {
     @Override
     public void initialize(Bootstrap<TicTacToeConfiguration> bootstrap) {
         // nothing to do yet
+        guiceBundle = GuiceBundle.<TicTacToeConfiguration>newBuilder()
+                .addModule(new LiveModule())
+                .setConfigClass(TicTacToeConfiguration.class)
+                .build();
+
+        bootstrap.addBundle(guiceBundle);
     }
 
     @Override
     public void run(TicTacToeConfiguration configuration,
                     Environment environment) {
-
-        final TicTacToeResource resource = new TicTacToeResource(
-                configuration.getTemplate(),
-                configuration.getDefaultName()
-        );
-        environment.jersey().register(resource);
+        environment.jersey().register(LobbyResource.class);
     }
 }

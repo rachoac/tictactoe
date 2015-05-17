@@ -1,5 +1,7 @@
 package com.racho.tictactoe.lobby.logic;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by aron on 5/16/15.
  */
@@ -11,10 +13,12 @@ public class Player {
         this.playerName = playerName;
     }
 
+    @JsonProperty
     public String getPlayerName() {
         return this.playerName;
     }
 
+    @JsonProperty
     public long getJoinedTs() {
         return joinedTs;
     }

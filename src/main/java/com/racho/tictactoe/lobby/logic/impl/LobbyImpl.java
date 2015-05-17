@@ -51,7 +51,21 @@ public class LobbyImpl implements Lobby {
 
     @Override
     public Challenge createChallenge( String challengerPlayer, String challengedPlayer ) {
-        String challengeID = challengedPlayer + "_" + challengedPlayer;
+        // assert that the challenger and challenged players both exist in the lobby
+        {
+            Player player = lobbyDAO.getPlayer( challengerPlayer );
+            if ( player == null ) {
+                throw new PlayerNotFoundException("Challenger " + challengerPlayer + " not found");
+            }
+        }
+        {
+            Player player = lobbyDAO.getPlayer( challengedPlayer );
+            if ( player == null ) {
+                throw new PlayerNotFoundException("Challenged " + challengerPlayer + " not found");
+            }
+        }
+
+        String challengeID = challengerPlayer + "_" + challengedPlayer;
         Challenge challenge = lobbyDAO.getChallenge( challengeID );
         if ( challenge != null ) {
             // challenge already exists

@@ -51,6 +51,9 @@ public class LobbyTest extends BaseUnitTest{
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
 
+        lobby.joinPlayer(challenger);
+        lobby.joinPlayer(challenged);
+
         Challenge challenge = lobby.createChallenge(challenger, challenged);
         assertNotNull(challenge);
 
@@ -68,6 +71,9 @@ public class LobbyTest extends BaseUnitTest{
     public void getChallenge() {
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
+
+        lobby.joinPlayer(challenger);
+        lobby.joinPlayer(challenged);
 
         Challenge challenge = lobby.createChallenge(challenger, challenged);
         Challenge resolvedChallenge = lobby.getChallengeFor(challenged);
@@ -148,6 +154,9 @@ public class LobbyTest extends BaseUnitTest{
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
 
+        lobby.joinPlayer(challenger);
+        lobby.joinPlayer(challenged);
+
         Challenge challenge = lobby.createChallenge(challenger, challenged);
         assertFalse(lobby.isChallengeAccepted(challenge.getChallengeID()));
 
@@ -160,6 +169,9 @@ public class LobbyTest extends BaseUnitTest{
     public void rejectChallenge() {
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
+
+        lobby.joinPlayer(challenger);
+        lobby.joinPlayer(challenged);
 
         Challenge challenge = lobby.createChallenge(challenger, challenged);
         assertFalse(lobby.isChallengeAccepted(challenge.getChallengeID()));
