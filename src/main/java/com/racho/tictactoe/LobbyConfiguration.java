@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * Created by aron on 5/15/15.
  */
-public class TicTacToeConfiguration extends Configuration {
+public class LobbyConfiguration extends Configuration {
     @NotEmpty
     private String template;
 

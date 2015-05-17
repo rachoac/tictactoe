@@ -9,13 +9,13 @@ import io.dropwizard.setup.Environment;
 /**
  * Created by aron on 5/15/15.
  */
-public class TicTacToeApplication extends Application<TicTacToeConfiguration> {
+public class LobbyApplication extends Application<LobbyConfiguration> {
 
-    private GuiceBundle<TicTacToeConfiguration> guiceBundle;
+    private GuiceBundle<LobbyConfiguration> guiceBundle;
 
 
     public static void main(String[] args) throws Exception {
-        new TicTacToeApplication().run(args);
+        new LobbyApplication().run(args);
     }
 
     @Override
@@ -24,18 +24,18 @@ public class TicTacToeApplication extends Application<TicTacToeConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<TicTacToeConfiguration> bootstrap) {
+    public void initialize(Bootstrap<LobbyConfiguration> bootstrap) {
         // nothing to do yet
-        guiceBundle = GuiceBundle.<TicTacToeConfiguration>newBuilder()
+        guiceBundle = GuiceBundle.<LobbyConfiguration>newBuilder()
                 .addModule(new LiveModule())
-                .setConfigClass(TicTacToeConfiguration.class)
+                .setConfigClass(LobbyConfiguration.class)
                 .build();
 
         bootstrap.addBundle(guiceBundle);
     }
 
     @Override
-    public void run(TicTacToeConfiguration configuration,
+    public void run(LobbyConfiguration configuration,
                     Environment environment) {
         environment.jersey().register(LobbyResource.class);
     }

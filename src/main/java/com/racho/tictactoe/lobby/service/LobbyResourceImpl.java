@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
+import static com.racho.tictactoe.lobby.logic.ChallengeStatus.accepted;
+import static com.racho.tictactoe.lobby.logic.ChallengeStatus.rejected;
+
 /**
  * Created by aron on 5/16/15.
  */
@@ -57,9 +60,9 @@ public class LobbyResourceImpl implements LobbyResource {
             String challengeID,
             String response
     ) {
-        if ( "accept".equalsIgnoreCase(response) ) {
+        if (accepted.toString().equalsIgnoreCase(response) ) {
             lobby.acceptChallenge(challengeID);
-        } else if ("reject".equalsIgnoreCase(response) ) {
+        } else if (rejected.toString().equalsIgnoreCase(response) ) {
             lobby.rejectChallenge(challengeID);
         } else {
             throw new IllegalArgumentException("Invalid challenge response");
