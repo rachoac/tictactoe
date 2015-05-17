@@ -52,18 +52,8 @@ public class LobbyImpl implements Lobby {
     @Override
     public Challenge createChallenge( String challengerPlayer, String challengedPlayer ) {
         // assert that the challenger and challenged players both exist in the lobby
-        {
-            Player player = lobbyDAO.getPlayer( challengerPlayer );
-            if ( player == null ) {
-                throw new PlayerNotFoundException("Challenger " + challengerPlayer + " not found");
-            }
-        }
-        {
-            Player player = lobbyDAO.getPlayer( challengedPlayer );
-            if ( player == null ) {
-                throw new PlayerNotFoundException("Challenged " + challengerPlayer + " not found");
-            }
-        }
+        validatePlayer(challengerPlayer);
+        validatePlayer(challengedPlayer);
 
         String challengeID = challengerPlayer + "_" + challengedPlayer;
         Challenge challenge = lobbyDAO.getChallenge( challengeID );
@@ -77,10 +67,19 @@ public class LobbyImpl implements Lobby {
             challengerPlayer, challengedPlayer,
             new Date().getTime()
         );
+        challenge.setChallengeStatus(ChallengeStatus.pending);
 
         lobbyDAO.createChallenge( challenge );
 
         return challenge;
+    }
+
+    private void validatePlayer(String playerName) {
+        Player player = lobbyDAO.getPlayer(playerName);
+        if (player == null) {
+            String msg = "Challenged " + playerName + " not found";
+            throw new PlayerNotFoundException(msg);
+        }
     }
 
     /**
@@ -91,6 +90,8 @@ public class LobbyImpl implements Lobby {
      */
     @Override
     public Challenge getChallengeFor( String challengedPlayer ) {
+        validatePlayer(challengedPlayer);
+
         List<Challenge> challenges = lobbyDAO.getChallengesFor( challengedPlayer );
         Optional<Challenge> first =
                 challenges
@@ -104,11 +105,17 @@ public class LobbyImpl implements Lobby {
                     }
                 })
                 .findFirst();
+
         if ( first.isPresent() ) {
             return first.get();
         }
 
         return null;
+    }
+
+    @Override
+    public Challenge getChallenge(String challengeID) {
+        return lobbyDAO.getChallenge(challengeID);
     }
 
     /**

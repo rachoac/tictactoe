@@ -5,6 +5,7 @@ package com.racho.tictactoe.lobby.logic;
  */
 public enum ChallengeStatus {
 
+    pending,
     accepted,
     rejected
 

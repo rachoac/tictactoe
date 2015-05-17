@@ -87,6 +87,9 @@ public class LobbyTest extends BaseUnitTest{
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
 
+        lobby.joinPlayer(challenger);
+        lobby.joinPlayer(challenged);
+
         Challenge challenge = new Challenge(
                 UUID.randomUUID().toString(),
                 challenger, challenged,
@@ -104,6 +107,10 @@ public class LobbyTest extends BaseUnitTest{
     public void getFirstNonExpiredChallenge() {
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
+
+        lobby.joinPlayer(challenger);
+        lobby.joinPlayer(challenged);
+
         Challenge firstOne;
 
         {

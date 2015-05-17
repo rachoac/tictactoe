@@ -41,6 +41,8 @@ public interface Lobby {
      */
     public Challenge getChallengeFor( String challengedPlayer );
 
+    Challenge getChallenge(String challengeID);
+
     /**
      * Removes the named challenge if its expired
      * @param challengeID

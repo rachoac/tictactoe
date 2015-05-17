@@ -5,7 +5,7 @@ import com.racho.tictactoe.lobby.logic.Player;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.Response;
+import javax.ws.rs.core.Response;
 
 /**
  * Created by aron on 5/16/15.
@@ -35,14 +35,27 @@ public interface LobbyResource {
      */
     @GET
     @Path("/challenge/{challengeID}/status")
-    public Response challengeStatus();
+    public String challengeStatus(@PathParam("challengeID") String challengeID);
 
     /**
-     * Retrieves an offered challenge
+     * Retrieves a player challenge (first nonexpired challenge)
      * @return
      */
     @GET
-    @Path("/challenge")
-    public Response getChallenge();
+    @Path("/player/{challengedPlayerName}/challenge")
+    public Response getChallenge(
+            @PathParam("challengedPlayerName") String challengedPlayerName
+    );
+
+    /**
+     * Accepts or rejects player challenge
+     * @return
+     */
+    @PUT
+    @Path("/challenge/{challengeID}?response={response}")
+    public void acceptChallenge(
+            @PathParam("challengedPlayerName") String challengeID,
+            @QueryParam("response") String response
+    );
 
 }
