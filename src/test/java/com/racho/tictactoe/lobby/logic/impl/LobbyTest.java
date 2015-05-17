@@ -77,22 +77,6 @@ public class LobbyTest extends BaseUnitTest{
     }
 
     @Test
-    public void getChallengeOfMultipleUnexpired() {
-        String challenger = UUID.randomUUID().toString();
-        String challenged = UUID.randomUUID().toString();
-
-        Challenge challenge = lobby.createChallenge(challenger, challenged);
-        for ( int i = 0; i < 10; i++ ) {
-            lobby.createChallenge(challenger, challenged);
-        }
-
-        Challenge resolvedChallenge = lobby.getChallengeFor(challenged);
-
-        assertNotNull(resolvedChallenge);
-        assertEquals("Expected to resolve challenge", challenge.getChallengeID(), resolvedChallenge.getChallengeID());
-    }
-
-    @Test
     public void getExpiredChallenge() {
         String challenger = UUID.randomUUID().toString();
         String challenged = UUID.randomUUID().toString();
@@ -158,4 +142,31 @@ public class LobbyTest extends BaseUnitTest{
         assertNotNull(resolvedChallenge);
         assertEquals("Expected to resolve challenge", firstOne.getChallengeID(), resolvedChallenge.getChallengeID());
     }
+
+    @Test
+    public void acceptChallenge() {
+        String challenger = UUID.randomUUID().toString();
+        String challenged = UUID.randomUUID().toString();
+
+        Challenge challenge = lobby.createChallenge(challenger, challenged);
+        assertFalse(lobby.isChallengeAccepted(challenge.getChallengeID()));
+
+        lobby.acceptChallenge(challenge.getChallengeID());
+
+        assertTrue( lobby.isChallengeAccepted(challenge.getChallengeID()) );
+    }
+
+    @Test
+    public void rejectChallenge() {
+        String challenger = UUID.randomUUID().toString();
+        String challenged = UUID.randomUUID().toString();
+
+        Challenge challenge = lobby.createChallenge(challenger, challenged);
+        assertFalse(lobby.isChallengeAccepted(challenge.getChallengeID()));
+
+        lobby.rejectChallenge(challenge.getChallengeID());
+
+        assertFalse(lobby.isChallengeAccepted(challenge.getChallengeID()));
+    }
+
 }

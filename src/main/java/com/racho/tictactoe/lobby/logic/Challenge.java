@@ -51,7 +51,7 @@ public class Challenge {
         return this.challengeStatus;
     }
 
-    public void setChallengeStatusthis(ChallengeStatus challengeStatus) {
+    public void setChallengeStatus(ChallengeStatus challengeStatus) {
         this.challengeStatus = challengeStatus;
     }
 

@@ -41,5 +41,10 @@ public class LobbyDAOImpl implements LobbyDAO {
     public List<Challenge> getChallengesFor(String challengedPlayer) {
         return null;
     }
+
+    @Override
+    public void saveChallenge(Challenge challenge) {
+
+    }
 }
 

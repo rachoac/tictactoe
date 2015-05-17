@@ -16,4 +16,6 @@ public interface LobbyDAO {
     public void removeChallenge(String challengeID);
 
     public List<Challenge> getChallengesFor(String challengedPlayer);
+
+    public void saveChallenge(Challenge challenge);
 }

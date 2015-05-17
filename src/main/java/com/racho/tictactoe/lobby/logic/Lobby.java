@@ -19,4 +19,9 @@ public interface Lobby {
 
     public boolean isChallengeAccepted( String challengeID );
 
+    boolean acceptChallenge(String challengeID);
+
+    boolean rejectChallenge(String challengeID);
+
+    void removeChallenge(String challengeID);
 }

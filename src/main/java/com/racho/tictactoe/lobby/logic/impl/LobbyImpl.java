@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import static com.racho.tictactoe.lobby.logic.ChallengeStatus.accepted;
+import static com.racho.tictactoe.lobby.logic.ChallengeStatus.rejected;
 
 @Singleton
 public class LobbyImpl implements Lobby {
@@ -21,6 +22,7 @@ public class LobbyImpl implements Lobby {
     public LobbyImpl() {
     }
 
+    @Override
     public Player joinPlayer( String playerName ) {
         Player player = lobbyDAO.getPlayer( playerName );
         if ( player == null ) {
@@ -32,6 +34,7 @@ public class LobbyImpl implements Lobby {
         return player;
     }
 
+    @Override
     public boolean isPlayerJoined( String playerName ) {
         Player player = lobbyDAO.getPlayer( playerName );
         if ( player == null ) {
@@ -41,10 +44,12 @@ public class LobbyImpl implements Lobby {
         return true;
     }
 
+    @Override
     public void removePlayer( String playerName ) {
         lobbyDAO.removePlayer( playerName );
     }
 
+    @Override
     public Challenge createChallenge( String challengerPlayer, String challengedPlayer ) {
         String challengeID = challengedPlayer + "_" + challengedPlayer;
         Challenge challenge = lobbyDAO.getChallenge( challengeID );
@@ -70,6 +75,7 @@ public class LobbyImpl implements Lobby {
      * @param challengedPlayer
      * @return the first non-expired challenge
      */
+    @Override
     public Challenge getChallengeFor( String challengedPlayer ) {
         List<Challenge> challenges = lobbyDAO.getChallengesFor( challengedPlayer );
         Optional<Challenge> first =
@@ -95,6 +101,7 @@ public class LobbyImpl implements Lobby {
      * @param challengeID
      * @return true if expired challenge was removed
      */
+    @Override
     public boolean removeExpiredChallenge( String challengeID ) {
         Challenge challenge = lobbyDAO.getChallenge( challengeID );
         if ( challenge == null ) {
@@ -110,17 +117,43 @@ public class LobbyImpl implements Lobby {
         return true;
     }
 
+    @Override
     public boolean isChallengeAccepted( String challengeID ) {
         Challenge challenge = lobbyDAO.getChallenge( challengeID );
         if ( challenge == null ) {
             return false;
         }
 
-        if ( challenge.getChallengeStatus() == accepted ) {
-            return true;
+        return challenge.getChallengeStatus() == accepted;
+    }
+
+    @Override
+    public boolean acceptChallenge(String challengeID) {
+        Challenge challenge = lobbyDAO.getChallenge( challengeID );
+        if ( challenge == null ) {
+            return false;
         }
 
-        return false;
+        challenge.setChallengeStatus(accepted);
+        lobbyDAO.saveChallenge(challenge);
+        return true;
+    }
+
+    @Override
+    public boolean rejectChallenge(String challengeID) {
+        Challenge challenge = lobbyDAO.getChallenge( challengeID );
+        if ( challenge == null ) {
+            return false;
+        }
+
+        challenge.setChallengeStatus(rejected);
+        lobbyDAO.saveChallenge(challenge);
+        return true;
+    }
+
+    @Override
+    public void removeChallenge(String challengeID) {
+        lobbyDAO.removeChallenge(challengeID);
     }
 
     // ------------------------------------------------------------------------------------------------------
