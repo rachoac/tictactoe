@@ -3,7 +3,6 @@ package com.racho.tictactoe;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.racho.tictactoe.lobby.logic.Lobby;
-import com.racho.tictactoe.lobby.logic.impl.LobbyImpl;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -15,7 +14,7 @@ public class TicTacToeApplication extends Application<TicTacToeConfiguration> {
     public static void main(String[] args) throws Exception {
 
 
-        Injector injector = Guice.createInjector(new AppInjector());
+        Injector injector = Guice.createInjector(new LiveModule());
         Lobby x = injector.getInstance( Lobby.class );
 
         new TicTacToeApplication().run(args);

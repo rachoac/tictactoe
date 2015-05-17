@@ -5,6 +5,8 @@ package com.racho.tictactoe.lobby.logic;
  */
 public interface Lobby {
 
+    public boolean isPlayerJoined( String playerName );
+
     public Player joinPlayer( String playerName);
 
     public void removePlayer( String playerName );
@@ -16,4 +18,5 @@ public interface Lobby {
     public boolean removeExpiredChallenge( String challengeID );
 
     public boolean isChallengeAccepted( String challengeID );
+
 }

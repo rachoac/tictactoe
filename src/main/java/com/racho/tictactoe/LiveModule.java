@@ -9,7 +9,7 @@ import com.racho.tictactoe.lobby.logic.impl.LobbyImpl;
 /**
  * Created by aron on 5/16/15.
  */
-public class AppInjector extends AbstractModule {
+public class LiveModule extends AbstractModule {
 
     @Override
     protected void configure() {

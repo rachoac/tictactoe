@@ -32,6 +32,15 @@ public class LobbyImpl implements Lobby {
         return player;
     }
 
+    public boolean isPlayerJoined( String playerName ) {
+        Player player = lobbyDAO.getPlayer( playerName );
+        if ( player == null ) {
+           return false;
+        }
+
+        return true;
+    }
+
     public void removePlayer( String playerName ) {
         lobbyDAO.removePlayer( playerName );
     }
