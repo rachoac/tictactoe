@@ -1,10 +1,7 @@
-package com.racho.tictactoe.game.logic.impl;
+package com.racho.tictactoe.lobby.logic.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by aron on 5/18/15.
- */
 public class Match {
 
     private String matchID;
@@ -19,6 +16,7 @@ public class Match {
     }
 
     public Match() {
+        // for deserialization
     }
 
     @JsonProperty

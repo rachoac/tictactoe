@@ -2,6 +2,7 @@ package com.racho.tictactoe.game.service;
 
 import com.racho.tictactoe.game.logic.impl.Match;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,6 +17,7 @@ public interface GameResource {
 
     @POST
     @Path("/match/create")
-    public Match createMatch( String challengerPlayer, String challengedPlayer );
+    public Match createMatch( @FormParam("challengerPlayer") String challengerPlayer,
+                              @FormParam("challengedPlayer") String challengedPlayer );
 
 }

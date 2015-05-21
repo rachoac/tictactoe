@@ -11,6 +11,7 @@ public class GameResourceImpl implements GameResource {
 
     @Override
     public Match createMatch(String challengerPlayer, String challengedPlayer) {
-        return null;
+        String matchID = challengerPlayer + "_" + challengedPlayer;
+        return new Match(matchID, challengerPlayer, challengedPlayer );
     }
 }

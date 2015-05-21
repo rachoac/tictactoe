@@ -20,4 +20,8 @@ public interface LobbyDAO {
     public void saveChallenge(Challenge challenge);
 
     public List<String> getJoinedPlayers();
+
+    public void setChallengeMatchID(String challengeID, String matchID);
+
+    public String getMatchIDForChallenge(String challengeID);
 }

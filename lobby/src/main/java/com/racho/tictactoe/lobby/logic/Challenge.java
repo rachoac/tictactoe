@@ -11,6 +11,7 @@ public class Challenge {
     private String challengedPlayer;
     private long challengeTs;
     private ChallengeStatus challengeStatus;
+    private String matchID;
 
     public Challenge(String challengeID, String challengerPlayer, String challengedPlayer, long challengeTs) {
         this.challengeID = challengeID;
@@ -65,5 +66,13 @@ public class Challenge {
 
     public void setChallengeID(String challengeID) {
         this.challengeID = challengeID;
+    }
+
+    public String getMatchID() {
+        return matchID;
+    }
+
+    public void setMatchID(String matchID) {
+        this.matchID = matchID;
     }
 }

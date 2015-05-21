@@ -85,4 +85,6 @@ public interface Lobby {
      * @return
      */
     public List<Player> getJoinedPlayers();
+
+    public String getMatchIDForChallenge(String challengeID);
 }

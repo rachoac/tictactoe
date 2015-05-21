@@ -15,10 +15,19 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public interface LobbyResource {
 
+    /**
+     * Joins a player to the lobby, making them avaiable for game challenges
+     * @param playerName
+     * @return
+     */
     @POST
     @Path("/join")
-    public Player join(@QueryParam("playerName") String playerName);
+    public Response join(@QueryParam("playerName") String playerName);
 
+    /**
+     * Removes a player from the lobby, making them unavailable for game challenges
+     * @param playerName
+     */
     @DELETE
     @Path("/join")
     public void remove(@QueryParam("playerName") String playerName);
@@ -29,7 +38,7 @@ public interface LobbyResource {
      */
     @POST
     @Path("/players/{challengedPlayerName}/challenge")
-    public Challenge challengePlayer(
+    public Response challengePlayer(
             @PathParam("challengedPlayerName") String challengedPlayerName,
             @QueryParam("challengerPlayerName") String challengerPlayerName
     );
@@ -40,7 +49,12 @@ public interface LobbyResource {
      */
     @GET
     @Path("/challenge/{challengeID}/status")
-    public String challengeStatus(@PathParam("challengeID") String challengeID);
+    public Response challengeStatus(@PathParam("challengeID") String challengeID);
+
+
+    @GET
+    @Path("/challenge/{challengeID}/matchID")
+    public Response challengeMatchID(@PathParam("challengeID") String challengeID);
 
     /**
      * Retrieves a player challenge (first nonexpired challenge)
@@ -58,15 +72,15 @@ public interface LobbyResource {
      */
     @GET
     @Path("/players")
-    public List<Player> getPlayers();
+    public Response getPlayers();
 
     /**
      * Accepts or rejects player challenge
-     * @return
+     * @return matchID
      */
     @PUT
     @Path("/challenge/{challengeID}")
-    public void acceptChallenge(
+    public Response acceptChallenge(
             @PathParam("challengeID") String challengeID,
             @QueryParam("response") String response
     );

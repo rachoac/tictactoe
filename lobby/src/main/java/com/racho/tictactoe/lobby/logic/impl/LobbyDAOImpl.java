@@ -88,5 +88,22 @@ public class LobbyDAOImpl implements LobbyDAO {
                 .stream()
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void setChallengeMatchID(String challengeID, String matchID) {
+        Challenge challenge = getChallenge(challengeID);
+        if ( challenge != null ) {
+            challenge.setMatchID(matchID);
+        }
+    }
+
+    @Override
+    public String getMatchIDForChallenge(String challengeID) {
+        Challenge challenge = getChallenge(challengeID);
+        if ( challenge == null ) {
+            return null;
+        }
+        return challenge.getMatchID();
+    }
 }
 

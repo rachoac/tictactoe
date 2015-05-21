@@ -21,8 +21,9 @@ import static com.racho.tictactoe.lobby.logic.ChallengeStatus.rejected;
 @Singleton
 public class LobbyResourceImpl implements LobbyResource {
 
-    public Player join(String playerName) {
-        return lobby.joinPlayer(playerName);
+    public Response join(String playerName) {
+        Player player = lobby.joinPlayer(playerName);
+        return Response.ok(player).build();
     }
 
     public void remove(String playerName) {
@@ -34,20 +35,31 @@ public class LobbyResourceImpl implements LobbyResource {
      * @return
      */
 
-    public Challenge challengePlayer(
+    public Response challengePlayer(
             String challengedPlayerName,
             String challengerPlayerName
     ) {
-        return lobby.createChallenge(challengerPlayerName, challengedPlayerName);
+        return Response.ok(
+            lobby.createChallenge(challengerPlayerName, challengedPlayerName)
+        ).build();
     }
 
     @Override
-    public String challengeStatus(String challengeID) {
+    public Response challengeStatus(String challengeID) {
         Challenge challenge = lobby.getChallenge(challengeID);
         if ( challenge == null ) {
             throw new ChallengeNotFoundException("ChallengeID " + challengeID + " not found");
         }
-        return challenge.getChallengeStatus() != null ? challenge.getChallengeStatus().toString() : "pending";
+        return Response.ok(
+                challenge.getChallengeStatus() != null ? challenge.getChallengeStatus().toString() : "pending"
+        ).build();
+    }
+
+    @Override
+    public Response challengeMatchID(String challengeID) {
+        return Response.ok(
+            lobby.getMatchIDForChallenge(challengeID)
+        ).build();
     }
 
     public Response getChallenge(
@@ -63,21 +75,26 @@ public class LobbyResourceImpl implements LobbyResource {
         }
     }
 
-    public void acceptChallenge(
+    public Response acceptChallenge(
             String challengeID,
             String response
     ) {
         if (accepted.toString().equalsIgnoreCase(response) ) {
-            lobby.acceptChallenge(challengeID);
+            return Response.ok(
+                lobby.acceptChallenge(challengeID)
+            ).build();
         } else if (rejected.toString().equalsIgnoreCase(response) ) {
             lobby.rejectChallenge(challengeID);
+            return null;
         } else {
             throw new IllegalArgumentException("Invalid challenge response");
         }
     }
 
-    public List<Player> getPlayers() {
-        return lobby.getJoinedPlayers();
+    public Response getPlayers() {
+        return Response.ok(
+            lobby.getJoinedPlayers()
+        ).build();
     }
 
     // ------------------------------------------------------------------------------------------------------

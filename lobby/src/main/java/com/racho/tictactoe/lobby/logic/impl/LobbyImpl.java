@@ -42,11 +42,7 @@ public class LobbyImpl implements Lobby {
     @Override
     public boolean isPlayerJoined( String playerName ) {
         Player player = lobbyDAO.getPlayer( playerName );
-        if ( player == null ) {
-           return false;
-        }
-
-        return true;
+        return player != null;
     }
 
     @Override
@@ -173,6 +169,8 @@ public class LobbyImpl implements Lobby {
                 challenge.getChallengedPlayer()
         );
 
+        lobbyDAO.setChallengeMatchID( challengeID, matchID );
+
         return matchID;
     }
 
@@ -200,6 +198,11 @@ public class LobbyImpl implements Lobby {
                 .stream()
                 .map(lobbyDAO::getPlayer)
                 .collect(Collectors.<Player>toList());
+    }
+
+    @Override
+    public String getMatchIDForChallenge(String challengeID) {
+        return lobbyDAO.getMatchIDForChallenge(challengeID);
     }
 
     // ------------------------------------------------------------------------------------------------------
