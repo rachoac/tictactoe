@@ -84,5 +84,5 @@ public interface Lobby {
      * Provides a list of players currently in the lobby and accepting games
      * @return
      */
-    public List<String> getJoinedPlayers();
+    public List<Player> getJoinedPlayers();
 }

@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
+import java.util.List;
+import java.util.function.Function;
+
 import static com.racho.tictactoe.lobby.logic.ChallengeStatus.accepted;
 import static com.racho.tictactoe.lobby.logic.ChallengeStatus.rejected;
 
@@ -20,6 +23,10 @@ public class LobbyResourceImpl implements LobbyResource {
 
     public Player join(String playerName) {
         return lobby.joinPlayer(playerName);
+    }
+
+    public void remove(String playerName) {
+        lobby.removePlayer(playerName);
     }
 
     /**
@@ -69,6 +76,9 @@ public class LobbyResourceImpl implements LobbyResource {
         }
     }
 
+    public List<Player> getPlayers() {
+        return lobby.getJoinedPlayers();
+    }
 
     // ------------------------------------------------------------------------------------------------------
     // dependencies

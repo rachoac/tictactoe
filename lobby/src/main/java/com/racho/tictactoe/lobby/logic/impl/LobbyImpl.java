@@ -9,7 +9,10 @@ import javax.inject.Singleton;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import static com.racho.tictactoe.lobby.logic.ChallengeStatus.accepted;
 import static com.racho.tictactoe.lobby.logic.ChallengeStatus.rejected;
 
@@ -191,8 +194,12 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public List<String> getJoinedPlayers() {
-        return lobbyDAO.getJoinedPlayers();
+    public List<Player> getJoinedPlayers() {
+        List<String> joinedPlayerNames = lobbyDAO.getJoinedPlayers();
+        return joinedPlayerNames
+                .stream()
+                .map(lobbyDAO::getPlayer)
+                .collect(Collectors.<Player>toList());
     }
 
     // ------------------------------------------------------------------------------------------------------
