@@ -81,5 +81,12 @@ public class LobbyDAOImpl implements LobbyDAO {
     public void saveChallenge(Challenge challenge) {
         challenges.put(challenge.getChallengeID(), challenge);
     }
+
+    @Override
+    public List<String> getJoinedPlayers() {
+        return joinedPlayers.keySet()
+                .stream()
+                .collect(Collectors.toList());
+    }
 }
 

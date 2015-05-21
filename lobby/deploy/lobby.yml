@@ -7,3 +7,4 @@ server:
   adminConnectors:
   - type: http
     port: 9091
+gameServiceURL: $env:GAME_SERVICE_URL:http://localhost:9092

@@ -1,8 +1,10 @@
 package com.racho.tictactoe.lobby.logic.impl;
 
+import com.racho.tictactoe.LobbyConfiguration;
 import com.racho.tictactoe.lobby.logic.*;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Date;
 import java.util.List;
@@ -149,15 +151,26 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public boolean acceptChallenge(String challengeID) {
+    public String acceptChallenge(String challengeID) {
         Challenge challenge = lobbyDAO.getChallenge( challengeID );
         if ( challenge == null ) {
-            return false;
+            throw new ChallengeNotFoundException(challengeID);
         }
 
         challenge.setChallengeStatus(accepted);
         lobbyDAO.saveChallenge(challenge);
-        return true;
+
+        // call game service and prepare a match
+        // todo
+        String matchID = "XXX"; // todo
+
+        // todo - what if this doesn't succeed (error, timeout, etc)
+        matchID = gameServiceClient.createMatch(
+                challenge.getChallengerPlayer(),
+                challenge.getChallengedPlayer()
+        );
+
+        return matchID;
     }
 
     @Override
@@ -177,14 +190,24 @@ public class LobbyImpl implements Lobby {
         lobbyDAO.removeChallenge(challengeID);
     }
 
+    @Override
+    public List<String> getJoinedPlayers() {
+        return lobbyDAO.getJoinedPlayers();
+    }
+
     // ------------------------------------------------------------------------------------------------------
     // dependencies
 
     private LobbyDAO lobbyDAO;
+    private GameServiceClientImpl gameServiceClient;
 
     @Inject
     public void setLobbyDAO( LobbyDAO lobbyDAO ) {
         this.lobbyDAO = lobbyDAO;
     }
 
+    @Inject
+    public void setGameServiceClient(GameServiceClientImpl gameServiceClient) {
+        this.gameServiceClient = gameServiceClient;
+    }
 }

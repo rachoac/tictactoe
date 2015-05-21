@@ -1,5 +1,7 @@
 package com.racho.tictactoe.lobby.logic;
 
+import java.util.List;
+
 /**
  * Created by aron on 5/16/15.
  */
@@ -61,9 +63,9 @@ public interface Lobby {
     /**
      * Indicates that the challenge has been accepted
      * @param challengeID
-     * @return
+     * @return String matchID if successful match is created
      */
-    public boolean acceptChallenge(String challengeID);
+    public String acceptChallenge(String challengeID);
 
     /**
      * Indicates that the challenge has been rejected
@@ -77,4 +79,10 @@ public interface Lobby {
      * @param challengeID
      */
     public void removeChallenge(String challengeID);
+
+    /**
+     * Provides a list of players currently in the lobby and accepting games
+     * @return
+     */
+    public List<String> getJoinedPlayers();
 }

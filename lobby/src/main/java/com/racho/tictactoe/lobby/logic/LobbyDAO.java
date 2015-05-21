@@ -18,4 +18,6 @@ public interface LobbyDAO {
     public List<Challenge> getChallengesFor(String challengedPlayer);
 
     public void saveChallenge(Challenge challenge);
+
+    public List<String> getJoinedPlayers();
 }

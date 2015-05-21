@@ -2,6 +2,7 @@ package com.racho.tictactoe;
 
 import com.hubspot.dropwizard.guice.GuiceBundle;
 import com.racho.tictactoe.lobby.service.LobbyResource;
+import de.thomaskrille.dropwizard.environment_configuration.EnvironmentConfigurationFactoryFactory;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -12,7 +13,6 @@ import io.dropwizard.setup.Environment;
 public class LobbyApplication extends Application<LobbyConfiguration> {
 
     private GuiceBundle<LobbyConfiguration> guiceBundle;
-
 
     public static void main(String[] args) throws Exception {
         new LobbyApplication().run(args);
@@ -26,6 +26,8 @@ public class LobbyApplication extends Application<LobbyConfiguration> {
     @Override
     public void initialize(Bootstrap<LobbyConfiguration> bootstrap) {
         // nothing to do yet
+        bootstrap.setConfigurationFactoryFactory(new EnvironmentConfigurationFactoryFactory());
+
         guiceBundle = GuiceBundle.<LobbyConfiguration>newBuilder()
                 .addModule(new LiveModule())
                 .setConfigClass(LobbyConfiguration.class)

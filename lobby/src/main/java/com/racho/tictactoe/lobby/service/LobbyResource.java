@@ -52,9 +52,9 @@ public interface LobbyResource {
      * @return
      */
     @PUT
-    @Path("/challenge/{challengeID}?response={response}")
+    @Path("/challenge/{challengeID}")
     public void acceptChallenge(
-            @PathParam("challengedPlayerName") String challengeID,
+            @PathParam("challengeID") String challengeID,
             @QueryParam("response") String response
     );
 
