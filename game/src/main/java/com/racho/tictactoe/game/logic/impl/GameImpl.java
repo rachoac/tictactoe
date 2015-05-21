@@ -1,6 +1,8 @@
 package com.racho.tictactoe.game.logic.impl;
 
 import com.racho.tictactoe.game.logic.Game;
+import com.racho.tictactoe.game.logic.GameState;
+import org.json.simple.JSONObject;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -18,7 +20,57 @@ public class GameImpl implements Game {
 
         gameDAO.createMatch( match );
 
+        GameController controller = new GameController();
+        controller.create(challengerPlayer, challengedPlayer);
+        gameDAO.saveGame(match.getMatchID(), controller.getBoardData());
+
         return match;
+    }
+
+    @Override
+    public String getMatchTurnOwner(String matchID) {
+        GameController controller = getGameController(matchID);
+        return controller.getTurnOwner();
+    }
+
+    @Override
+    public void performMove(String matchID, String player, int x, int y) {
+        GameController controller = getGameController(matchID);
+        if ( controller.getTurnOwner().equals(player) ) {
+            controller.doMove(x, y);
+            gameDAO.saveGame(matchID, controller.getBoardData());
+        } else {
+            throw new IllegalMoveException("Not player " + player + "'s turn");
+        }
+
+        if ( controller.getState() == GameState.won || controller.getState() == GameState.stalemate ) {
+            // end of the game
+            // todo
+            // inform lobby that the game is complete
+            // ...
+        }
+    }
+
+    @Override
+    public GameStatus getMatchStatus(String matchID) {
+        GameController controller = getGameController(matchID);
+        GameState state = controller.getState();
+        String winner = controller.getWinner();
+        String turnOwner = controller.getTurnOwner();
+
+        GameStatus status = new GameStatus();
+        status.setState(state);
+        status.setWinner(winner);
+        status.setTurnOwner(turnOwner);
+
+        return status;
+    }
+
+    private GameController getGameController(String matchID) {
+        JSONObject gameData = gameDAO.getGame( matchID );
+        GameController controller = new GameController();
+        controller.setBoardData(gameData);
+        return controller;
     }
 
     // ------------------------------------------------------------------------------------------------------
