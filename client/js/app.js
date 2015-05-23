@@ -1,29 +1,69 @@
 import React from 'react';
-import Router from 'react-router';
-import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
 
-import LoginHandler from './components/Login.js';
+class Player extends React.Component {
+    constructor(props) {
+        super(props);
 
-let App = React.createClass({
+        this.state = {
+            name : props.name
+        }
+    }
+
     render() {
         return (
-            <div className="nav">
-                <Link to="app">Home</Link>
-                <Link to="login">Login</Link>
+            <li>{this.state.name}</li>
 
-                {/* this is the importTant part */}
-                <RouteHandler/>
+        );
+    }
+}
+
+class PlayerList extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            players : props.players || []
+        }
+    }
+
+    render() {
+
+        var players = this.state.players.map(function (player) {
+            return (
+                <Player name={player.name}/>
+            );
+        });
+
+        return (
+            <ul>
+                {players}
+            </ul>
+        );
+    }
+}
+
+class Lobby extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        var players = [
+            {
+                'name' : 'aron'
+            },
+
+            {
+                'name' : 'sarah'
+            }
+        ];
+
+        return (
+            <div>
+                <PlayerList players={players}/>
             </div>
         );
     }
-});
+}
 
-let routes = (
-    <Route name="app" path="/" handler={App}>
-        <Route name="login" path="/login" handler={LoginHandler}/>
-    </Route>
-);
-
-Router.run(routes, function (Handler) {
-    React.render(<Handler/>, document.body);
-});
+React.render(<Lobby/>, document.body);
