@@ -122,7 +122,8 @@ var LobbyStore = function() {
         if ( self.challenge ) {
             $.get('http://localhost:9090/lobby/challenge/' + self.challenge.challengeID, function(challenge) {
                 if ( challenge.challengeStatus === 'accepted' ) {
-
+                    self.challenge = undefined;
+                    React.render(<Main visible='gameboard'/>, document.getElementById('main'));
                 }
                 if ( challenge.challengeStatus === 'rejected' || challenge.challengeExpired ) {
                     self._challengeCancel();
@@ -156,7 +157,16 @@ var LobbyStore = function() {
             success: function(response) {
                 self.challenge = undefined;
                 self.activeChallenge = undefined;
-                React.render(<Main visible='roster'/>, document.getElementById('main'));
+
+                if ( response.challengeStatus == 'accepted' ) {
+                    React.render(<Main visible='gameboard'/>, document.getElementById('main'));
+                }
+
+                if ( response.challengeStatus == 'rejected' ) {
+                    alert('rejected');
+                    React.render(<Main visible='roster'/>, document.getElementById('main'));
+                }
+
             }.bind(self)
         });
     };

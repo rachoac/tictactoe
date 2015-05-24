@@ -19,7 +19,6 @@ export default class ChallengeInterface extends React.Component {
                 console.log('Checking...');
                 Dispatcher.dispatch({ type: "challenge-status" });
             } else {
-                debugger;
                 clearInterval(self.daemon);
             }
         }, 1000);

@@ -88,13 +88,23 @@ public class LobbyResourceImpl implements LobbyResource {
             String challengeID,
             String response
     ) {
+        Challenge challenge = lobby.getChallenge(challengeID);
+        if ( challenge == null ) {
+            throw new IllegalArgumentException("Invalid challenge");
+        }
+
         if (accepted.toString().equalsIgnoreCase(response) ) {
+            String matchID = lobby.acceptChallenge(challengeID);
+            challenge.setMatchID(matchID);
             return Response.ok(
-                lobby.acceptChallenge(challengeID)
+                challenge
             ).build();
         } else if (rejected.toString().equalsIgnoreCase(response) ) {
             lobby.rejectChallenge(challengeID);
-            return null;
+            challenge.setMatchID(null);
+            return Response.ok(
+                challenge
+            ).build();
         } else {
             throw new IllegalArgumentException("Invalid challenge response");
         }

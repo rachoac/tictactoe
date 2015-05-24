@@ -3,6 +3,7 @@ var Lobby = require('./Lobby.js');
 var JoinInterface = require('./JoinInterface.js');
 var ChallengeInterface = require('./ChallengeInterface.js');
 var ActiveChallengeInterface = require('./ActiveChallengeInterface.js');
+var GameBoard = require('./GameBoard.js');
 
 export default class Main extends React.Component {
 
@@ -38,6 +39,10 @@ export default class Main extends React.Component {
                     }
                     case 'challenge' : {
                         toShow = <ChallengeInterface/>;
+                        break;
+                    }
+                    case 'gameboard' : {
+                        toShow = <GameBoard/>;
                         break;
                     }
                     default:

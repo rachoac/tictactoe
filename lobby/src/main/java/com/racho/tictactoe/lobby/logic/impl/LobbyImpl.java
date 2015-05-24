@@ -92,10 +92,16 @@ public class LobbyImpl implements Lobby {
         validatePlayer(challengedPlayer);
 
         List<Challenge> challenges = lobbyDAO.getChallengesFor( challengedPlayer );
+        if ( challenges.isEmpty() ) {
+            return null;
+        }
         Optional<Challenge> first =
                 challenges
                 .stream()
                 .filter(challengeID -> {
+                    if ( challengeID == null ) {
+                        return false;
+                    }
                     if (challengeID.isChallengeExpired()) {
                         removeExpiredChallenge(challengeID.getChallengeID());
                         return false;
