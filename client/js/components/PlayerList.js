@@ -20,7 +20,17 @@ export default class PlayerList extends React.Component {
     }
 
     componentDidMount() {
+        console.log("Started roster updater.");
+        this.daemon = setInterval( function() {
+            Dispatcher.dispatch({ type: "load-player-list" });
+        }, 1000 );
+
         Dispatcher.dispatch({ type: "load-player-list" });
+    }
+
+    componentWillUnmount() {
+        console.log('Stopped roster updater.');
+        clearInterval(this.daemon);
     }
 
     render() {
