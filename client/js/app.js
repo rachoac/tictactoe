@@ -25,17 +25,22 @@ class JoinInterface extends React.Component {
         super(props);
     }
 
-    componentWillMount() {
-        debugger;
-    }
-
-    componentDidMount() {
-        debugger;
+    doSubmit() {
+        var username = this.refs.username.getDOMNode().value;
+        Dispatcher.dispatch({ type: "join-player", playerName: username });
     }
 
     render() {
+        var self = this;
+        var submit = function() {
+            self.doSubmit();
+        };
+
         return (
-            <input type='text'/>
+            <div>
+                <input type='text' ref='username'/>
+                <button onClick={submit}>Submit</button>
+            </div>
         );
     }
 }
@@ -115,9 +120,9 @@ class Lobby extends React.Component {
     }
 
     render() {
-
         return (
             <div>
+                <Navigation/>
                 <PlayerList players={this.state.players}/>
             </div>
         );
@@ -131,16 +136,16 @@ class Main extends React.Component {
 
     render() {
         var visible = this.props.visible;
-        if ( !visible || visible == 'roster' ) {
-            return (
-                <Lobby/>
-            );
-        }
-        if ( visible == 'join' ) {
-            return (
-                <JoinInterface/>
-            );
-        }
+        var roster = <Lobby/>;
+        var join = <JoinInterface/>;
+
+        var toShow = ( !visible || visible == 'roster' ) ? roster : join;
+
+        return (
+            <div>
+                {toShow}
+            </div>
+        );
     }
 
 }
@@ -148,12 +153,13 @@ class Main extends React.Component {
 var LobbyStore = function() {
     Dispatcher.register( function(payload) {
         switch (payload.type) {
-            case "do-join" : {
-                debugger;
-                break;
-            }
             case "load-player-list" : {
                 this._loadPlayerList();
+                break;
+            }
+
+            case "join-player" : {
+                this._joinPlayer(payload.playerName);
                 break;
             }
         }
@@ -166,6 +172,17 @@ var LobbyStore = function() {
         }.bind(this));
     };
 
+    this._joinPlayer = function(playerName) {
+        $.post('http://localhost:9090/lobby/roster?playerName=' + playerName, function(response) {
+            this._doneJoinedPlayer(response);
+        }.bind(this));
+    }
+
+    this._doneJoinedPlayer = function(players) {
+        React.render(<Main visible='roster'/>, document.getElementById('main'));
+        Dispatcher.dispatch({ type: "load-player-list" });
+    }
+
     this._notify = function(players) {
         Emitter.emit("player-list-changed", players);
     }
@@ -173,7 +190,6 @@ var LobbyStore = function() {
 
 var lobbyStore = new LobbyStore();
 
-React.render(<Navigation/>, document.getElementById('navigation'));
 React.render(<Main/>, document.getElementById('main'));
 
 setInterval( function() {
