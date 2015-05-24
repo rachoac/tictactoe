@@ -16,12 +16,21 @@ import java.util.List;
 public interface LobbyResource {
 
     /**
+     * Return list of players in the lobby
+     * @return
+     */
+    @GET
+    @Path("/roster")
+    public Response getPlayers();
+
+
+    /**
      * Joins a player to the lobby, making them avaiable for game challenges
      * @param playerName
      * @return
      */
     @POST
-    @Path("/join")
+    @Path("/roster")
     public Response join(@QueryParam("playerName") String playerName);
 
     /**
@@ -29,7 +38,7 @@ public interface LobbyResource {
      * @param playerName
      */
     @DELETE
-    @Path("/join")
+    @Path("/roster")
     public void remove(@QueryParam("playerName") String playerName);
 
     /**
@@ -37,11 +46,22 @@ public interface LobbyResource {
      * @return
      */
     @POST
-    @Path("/players/{challengedPlayerName}/challenge")
+    @Path("/roster/{challengedPlayerName}/challenge")
     public Response challengePlayer(
             @PathParam("challengedPlayerName") String challengedPlayerName,
             @QueryParam("challengerPlayerName") String challengerPlayerName
     );
+
+    /**
+     * Retrieves a player challenge (first nonexpired challenge)
+     * @return
+     */
+    @GET
+    @Path("/roster/{challengedPlayerName}/challenge")
+    public Response getChallenge(
+            @PathParam("challengedPlayerName") String challengedPlayerName
+    );
+
 
     /**
      * Retrieves the status of a challenge
@@ -57,24 +77,6 @@ public interface LobbyResource {
     public Response challengeMatchID(@PathParam("challengeID") String challengeID);
 
     /**
-     * Retrieves a player challenge (first nonexpired challenge)
-     * @return
-     */
-    @GET
-    @Path("/players/{challengedPlayerName}/challenge")
-    public Response getChallenge(
-            @PathParam("challengedPlayerName") String challengedPlayerName
-    );
-
-    /**
-     * Return list of players in the lobby
-     * @return
-     */
-    @GET
-    @Path("/players")
-    public Response getPlayers();
-
-    /**
      * Accepts or rejects player challenge
      * @return matchID
      */
@@ -84,5 +86,6 @@ public interface LobbyResource {
             @PathParam("challengeID") String challengeID,
             @QueryParam("response") String response
     );
+
 
 }
