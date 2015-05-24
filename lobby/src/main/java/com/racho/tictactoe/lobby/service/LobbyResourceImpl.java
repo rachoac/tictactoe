@@ -51,8 +51,18 @@ public class LobbyResourceImpl implements LobbyResource {
             throw new ChallengeNotFoundException("ChallengeID " + challengeID + " not found");
         }
         return Response.ok(
-                challenge.getChallengeStatus() != null ? challenge.getChallengeStatus().toString() : "pending"
+                challenge
         ).build();
+    }
+
+    @Override
+    public Response cancelChallenge(String challengeID) {
+        Challenge challenge = lobby.getChallenge(challengeID);
+        if ( challenge == null ) {
+            throw new ChallengeNotFoundException("ChallengeID " + challengeID + " not found");
+        }
+        lobby.removeChallenge(challengeID);
+        return Response.ok(challenge).build();
     }
 
     @Override
@@ -67,8 +77,7 @@ public class LobbyResourceImpl implements LobbyResource {
     ) {
         Challenge challenge = lobby.getChallengeFor(challengedPlayerName);
         if ( challenge == null ) {
-            return Response.status(Response.Status.NOT_FOUND)
-                .entity("Challenge not found for player " + challengedPlayerName).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         } else {
             return Response.status(Response.Status.OK)
                     .entity(challenge).build();

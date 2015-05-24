@@ -68,8 +68,17 @@ public interface LobbyResource {
      * @return
      */
     @GET
-    @Path("/challenge/{challengeID}/status")
+    @Path("/challenge/{challengeID}")
     public Response challengeStatus(@PathParam("challengeID") String challengeID);
+
+
+    /**
+     * Cancels a challenge
+     * @return
+     */
+    @DELETE
+    @Path("/challenge/{challengeID}")
+    public Response cancelChallenge(@PathParam("challengeID") String challengeID);
 
 
     @GET

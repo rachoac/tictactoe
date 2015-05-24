@@ -26,11 +26,19 @@ export default class PlayerList extends React.Component {
         }, 1000 );
 
         Dispatcher.dispatch({ type: "load-player-list" });
+
+        console.log("Started active challenge checker.");
+        this.activeChallengeDaemon = setInterval( function() {
+            Dispatcher.dispatch({ type: "active-challenge" });
+        }, 1000 );
     }
 
     componentWillUnmount() {
         console.log('Stopped roster updater.');
         clearInterval(this.daemon);
+
+        console.log('Stopped active challenge checker.');
+        clearInterval(this.activeChallengeDaemon);
     }
 
     render() {

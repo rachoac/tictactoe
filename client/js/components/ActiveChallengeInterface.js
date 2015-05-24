@@ -2,22 +2,26 @@ import React from 'react';
 var Dispatcher = require('../Dispatcher');
 var Main = require('./Main.js');
 
-export default class ChallengeInterface extends React.Component {
+export default class ActiveChallengeInterface extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    doCancel() {
-        Dispatcher.dispatch({ type: "challenge-cancel" });
+    doAccept() {
+        Dispatcher.dispatch({ type: "active-challenge-accept" });
+    }
+
+    doReject() {
+        Dispatcher.dispatch({ type: "active-challenge-reject" });
     }
 
     componentDidMount() {
         var self = this;
         self.daemon = setInterval( function() {
-            var hasChallenge = require('../stores/LobbyStore').getChallenge();
+            var hasChallenge = require('../stores/LobbyStore').getActiveChallenge();
             if ( hasChallenge ) {
                 console.log('Checking...');
-                Dispatcher.dispatch({ type: "challenge-status" });
+                Dispatcher.dispatch({ type: "active-challenge-status" });
             } else {
                 debugger;
                 clearInterval(self.daemon);
@@ -32,14 +36,18 @@ export default class ChallengeInterface extends React.Component {
 
     render() {
         var self = this;
-        var cancel = function() {
-            self.doCancel();
+        var accept = function() {
+            self.doAccept();
+        };
+        var reject = function() {
+            self.doReject();
         };
 
         return (
             <div>
-                Waiting for the player to respond ...
-                <button onClick={cancel}>Cancel</button>
+                A player challenged you!!
+                <button onClick={accept}>Accept</button>
+                <button onClick={reject}>Reject</button>
             </div>
         );
     }
