@@ -6,6 +6,56 @@ import Events from 'events';
 var Dispatcher = new Flux.Dispatcher();
 var Emitter = new Events.EventEmitter();
 
+class Navigation extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                <JoinNavigation/>
+            </div>
+        );
+    }
+}
+
+class JoinInterface extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentWillMount() {
+        debugger;
+    }
+
+    componentDidMount() {
+        debugger;
+    }
+
+    render() {
+        return (
+            <input type='text'/>
+        );
+    }
+}
+
+class JoinNavigation extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    doJoin() {
+        React.render(<Main visible='join'/>, document.getElementById('main'));
+    }
+
+    render() {
+        return (
+            <a href='#' onClick={this.doJoin}>Join</a>
+        );
+    }
+}
+
 class Player extends React.Component {
     constructor(props) {
         super(props);
@@ -74,9 +124,34 @@ class Lobby extends React.Component {
     }
 }
 
+class Main extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        var visible = this.props.visible;
+        if ( !visible || visible == 'roster' ) {
+            return (
+                <Lobby/>
+            );
+        }
+        if ( visible == 'join' ) {
+            return (
+                <JoinInterface/>
+            );
+        }
+    }
+
+}
+
 var LobbyStore = function() {
     Dispatcher.register( function(payload) {
         switch (payload.type) {
+            case "do-join" : {
+                debugger;
+                break;
+            }
             case "load-player-list" : {
                 this._loadPlayerList();
                 break;
@@ -86,7 +161,7 @@ var LobbyStore = function() {
     }.bind(this) );
 
     this._loadPlayerList = function() {
-        $.get('http://localhost:9090/lobby/players', function(players) {
+        $.get('http://localhost:9090/lobby/roster', function(players) {
             this._notify(players);
         }.bind(this));
     };
@@ -94,12 +169,12 @@ var LobbyStore = function() {
     this._notify = function(players) {
         Emitter.emit("player-list-changed", players);
     }
-
 }
 
 var lobbyStore = new LobbyStore();
 
-React.render(<Lobby/>, document.body);
+React.render(<Navigation/>, document.getElementById('navigation'));
+React.render(<Main/>, document.getElementById('main'));
 
 setInterval( function() {
     Dispatcher.dispatch({ type: "load-player-list" });
