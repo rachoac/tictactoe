@@ -11,14 +11,13 @@ class Player extends React.Component {
         super(props);
 
         this.state = {
-            name : props.name
+            player : props.player
         }
     }
 
     render() {
         return (
-            <li>{this.state.name}</li>
-
+            <li>{this.state.player.playerName}</li>
         );
     }
 }
@@ -33,17 +32,19 @@ class PlayerList extends React.Component {
     }
 
     componentWillMount() {
-        Emitter.on("load-player-list", function(players) {
-            debugger;
+        Emitter.on("player-list-changed", function(players) {
             this.setState({ players: players });
         }.bind(this) );
     }
 
-    render() {
+    componentDidMount() {
+        Dispatcher.dispatch({ type: "load-player-list" });
+    }
 
+    render() {
         var players = this.state.players.map(function (player) {
             return (
-                <Player name={player.name}/>
+                <Player player={player} key={player.playerName}/>
             );
         });
 
@@ -58,37 +59,22 @@ class PlayerList extends React.Component {
 class Lobby extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            players : props.players
+        }
     }
 
     render() {
-        var players = [
-            {
-                'name' : 'aron'
-            },
-
-            {
-                'name' : 'sarah'
-            },
-
-            {
-                'name' : 'samuel'
-            },
-
-            {
-                'name' : 'adam'
-            }
-        ];
 
         return (
             <div>
-                <PlayerList players={players}/>
+                <PlayerList players={this.state.players}/>
             </div>
         );
     }
 }
 
 var LobbyStore = function() {
-    debugger;
     Dispatcher.register( function(payload) {
         switch (payload.type) {
             case "load-player-list" : {
@@ -106,8 +92,7 @@ var LobbyStore = function() {
     };
 
     this._notify = function(players) {
-        Emitter.emit("player-list-changed", items);
-
+        Emitter.emit("player-list-changed", players);
     }
 
 }
@@ -115,3 +100,7 @@ var LobbyStore = function() {
 var lobbyStore = new LobbyStore();
 
 React.render(<Lobby/>, document.body);
+
+setInterval( function() {
+    Dispatcher.dispatch({ type: "load-player-list" });
+}, 1000 );
