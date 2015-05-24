@@ -1,0 +1,29 @@
+.square{
+    width:100px;
+    height:100px;
+
+    text-align: center;
+    font-weight: bolder;
+    font-size: xx-large;
+}
+
+.v{
+    border-left:1px solid #000;
+    border-right:1px solid #000;
+}
+
+.h{
+    border-top:1px solid #000;
+    border-bottom:1px solid #000;
+}
+
+.foo {
+    font-weight: bold;
+}
+
+.playerX {
+    color: red;
+}
+.playerO {
+    color: blue;
+}

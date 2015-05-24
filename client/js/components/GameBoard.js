@@ -1,5 +1,7 @@
 import React from 'react';
 var Dispatcher = require('../Dispatcher');
+var GameBoardCell = require('./GameBoardCell');
+var GameBoardStatus = require('./GameBoardStatus');
 
 export default class ChallengeInterface extends React.Component {
     constructor(props) {
@@ -16,8 +18,26 @@ export default class ChallengeInterface extends React.Component {
     render() {
         var self = this;
         return (
-            <div>
-                Game!
+            <div id="board">
+                <GameBoardStatus />
+
+                <table>
+                    <tr id="row1">
+                        <GameBoardCell/>
+                        <GameBoardCell v='true'/>
+                        <GameBoardCell/>
+                    </tr>
+                    <tr id="row2">
+                        <GameBoardCell h='true'/>
+                        <GameBoardCell h='true' v='true' player='X'/>
+                        <GameBoardCell h='true'/>
+                    </tr>
+                    <tr id="row3">
+                        <GameBoardCell/>
+                        <GameBoardCell v='true'/>
+                        <GameBoardCell/>
+                    </tr>
+                </table>
             </div>
         );
     }
