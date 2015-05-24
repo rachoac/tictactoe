@@ -15,7 +15,7 @@ export default class Lobby extends React.Component {
         return (
             <div>
                 <Navigation username={this.props.username}/>
-                <PlayerList players={this.state.players}/>
+                <PlayerList players={this.state.players} username={this.props.username}/>
             </div>
         );
     }

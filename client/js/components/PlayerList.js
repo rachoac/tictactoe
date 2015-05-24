@@ -24,9 +24,10 @@ export default class PlayerList extends React.Component {
     }
 
     render() {
+        var thisPlayer = this.props.username;
         var players = this.state.players.map(function (player) {
             return (
-                <Player player={player} key={player.playerName}/>
+                <Player player={player} key={player.playerName} canChallenge={ thisPlayer !== player.playerName }/>
             );
         });
 
