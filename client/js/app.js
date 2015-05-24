@@ -14,7 +14,7 @@ class Navigation extends React.Component {
     render() {
         return (
             <div>
-                <JoinNavigation/>
+                <LeaveNavigation username={this.props.username}/>
             </div>
         );
     }
@@ -27,7 +27,19 @@ class JoinInterface extends React.Component {
 
     doSubmit() {
         var username = this.refs.username.getDOMNode().value;
-        Dispatcher.dispatch({ type: "join-player", playerName: username });
+        if ( username ) {
+            Dispatcher.dispatch({ type: "join-player", playerName: username });
+        } else {
+            React.render(<Main visible='roster'/>, document.getElementById('main'));
+        }
+    }
+
+    componentDidMount() {
+        this.refs.username.getDOMNode().focus();
+    }
+
+    componentDidUpdate() {
+        this.refs.username.getDOMNode().focus();
     }
 
     render() {
@@ -38,25 +50,32 @@ class JoinInterface extends React.Component {
 
         return (
             <div>
+                <span>Username</span>
+                <br/>
                 <input type='text' ref='username'/>
+                <br/>
                 <button onClick={submit}>Submit</button>
             </div>
         );
     }
 }
 
-class JoinNavigation extends React.Component {
+class LeaveNavigation extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    doJoin() {
-        React.render(<Main visible='join'/>, document.getElementById('main'));
+    doLeave() {
+        var username = this.props.username;
+        Dispatcher.dispatch({ type: "leave-player", playerName: username });
     }
 
     render() {
+        var leave = function() {
+            this.doLeave();
+        }.bind(this);
         return (
-            <a href='#' onClick={this.doJoin}>Join</a>
+            <a href='#' onClick={leave}>Leave</a>
         );
     }
 }
@@ -122,7 +141,7 @@ class Lobby extends React.Component {
     render() {
         return (
             <div>
-                <Navigation/>
+                <Navigation username={this.props.username}/>
                 <PlayerList players={this.state.players}/>
             </div>
         );
@@ -130,16 +149,18 @@ class Lobby extends React.Component {
 }
 
 class Main extends React.Component {
+
     constructor(props) {
         super(props);
     }
 
     render() {
+        var username = this.props.username;
         var visible = this.props.visible;
-        var roster = <Lobby/>;
+        var roster = <Lobby username={username}/>;
         var join = <JoinInterface/>;
 
-        var toShow = ( !visible || visible == 'roster' ) ? roster : join;
+        var toShow = ( !visible || visible == 'join' ) ? join : roster;
 
         return (
             <div>
@@ -162,6 +183,12 @@ var LobbyStore = function() {
                 this._joinPlayer(payload.playerName);
                 break;
             }
+
+            case "leave-player" : {
+                debugger;
+                this._leavePlayer(payload.playerName);
+                break;
+            }
         }
 
     }.bind(this) );
@@ -174,19 +201,34 @@ var LobbyStore = function() {
 
     this._joinPlayer = function(playerName) {
         $.post('http://localhost:9090/lobby/roster?playerName=' + playerName, function(response) {
-            this._doneJoinedPlayer(response);
+            this._doneJoinedPlayer(playerName);
         }.bind(this));
-    }
+    };
 
-    this._doneJoinedPlayer = function(players) {
-        React.render(<Main visible='roster'/>, document.getElementById('main'));
+    this._leavePlayer = function(playerName) {
+        var self = this;
+        $.ajax({
+            url: 'http://localhost:9090/lobby/roster?playerName=' + playerName,
+            type: 'DELETE',
+            success: function(response) {
+                this._doneLeavePlayer(playerName);
+            }.bind(self)
+        });
+    };
+
+    this._doneJoinedPlayer = function(playerName) {
+        React.render(<Main visible='roster' username={playerName}/>, document.getElementById('main'));
         Dispatcher.dispatch({ type: "load-player-list" });
-    }
+    };
+
+    this._doneLeavePlayer = function(playerName) {
+        React.render(<Main visible='join'/>, document.getElementById('main'));
+    };
 
     this._notify = function(players) {
         Emitter.emit("player-list-changed", players);
-    }
-}
+    };
+};
 
 var lobbyStore = new LobbyStore();
 
