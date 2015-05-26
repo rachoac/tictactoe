@@ -11,11 +11,13 @@ public class Match {
     private String challengerPlayer;
     private String challengedPlayer;
     private long matchStartTs;
+    private MatchState state;
 
     public Match(String matchID, String challengerPlayer, String challengedPlayer) {
         this.matchID = matchID;
         this.challengerPlayer = challengerPlayer;
         this.challengedPlayer = challengedPlayer;
+        this.state = MatchState.active;
     }
 
     public Match() {
@@ -55,5 +57,14 @@ public class Match {
 
     public void setMatchStartTs(long matchStartTs) {
         this.matchStartTs = matchStartTs;
+    }
+
+    @JsonProperty
+    public MatchState getState() {
+        return state;
+    }
+
+    public void setState(MatchState state) {
+        this.state = state;
     }
 }

@@ -29,4 +29,8 @@ public interface GameResource {
     @GET
     @Path("/match/{matchID}")
     Response getMatchStatus( @PathParam("matchID") String matchID);
+
+    @DELETE
+    @Path("/match/{matchID}")
+    Response stopMatch( @PathParam("matchID") String matchID);
 }

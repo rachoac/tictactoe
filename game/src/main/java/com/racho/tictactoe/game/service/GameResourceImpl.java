@@ -35,6 +35,11 @@ public class GameResourceImpl implements GameResource {
         return Response.ok(game.getMatchStatus(matchID)).build();
     }
 
+    @Override
+    public Response stopMatch(String matchID) {
+        return Response.ok(game.stopMatch(matchID)).build();
+    }
+
     private Game game;
 
     @Inject

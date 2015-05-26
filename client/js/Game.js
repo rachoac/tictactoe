@@ -11,8 +11,15 @@ Game.prototype.isActive = function() {
 };
 
 Game.prototype.reset = function(matchID) {
+    debugger;
     this.state = 'active';
     this.matchID = matchID;
+};
+
+Game.prototype.stop = function() {
+    this.state = 'stopped';
+    this.matchID = undefined;
+    this.status = null;
 };
 
 Game.prototype.isMyTurn = function() {

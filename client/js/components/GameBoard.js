@@ -4,6 +4,7 @@ var Emitter = require('../Emitter');
 var GameBoardCell = require('./GameBoardCell');
 var GameBoardStatus = require('./GameBoardStatus');
 var Game = require('../Game');
+var cx = require('classnames');
 
 export default class ChallengeInterface extends React.Component {
     constructor(props) {
@@ -21,19 +22,55 @@ export default class ChallengeInterface extends React.Component {
 
         }, 1000);
 
-       
+        Emitter.on("game-state-changed", function(gameStatus) {
+            if ( gameStatus.winner ) {
+                // all done
+                console.log("Winner detected, killing state check daemon");
+
+                clearInterval( this.daemon );
+                self.setState( {
+                    winner : gameStatus.winner,
+                    stopped : gameStatus.match && gameStatus.match.state === 'stopped'
+                });
+            }
+        }.bind(this) );
     }
 
     componentWillUnmount() {
         clearInterval(this.daemon);
     }
 
+    doBackToLobby() {
+        Dispatcher.dispatch( { type: 'back-to-lobby'} );
+    }
+
+    doQuitGame() {
+        Dispatcher.dispatch( { type: 'quit-game'} );
+    }
+
     render() {
         var self = this;
+
+        var lobbyButtonCssClasses = cx({
+            hidden : !self.state.winner && !self.state.stopped
+        });
+
+        var quitButtonCssClasses = cx({
+            hidden : self.state.winner || self.state.stopped
+        });
+
+        var backToLobby = function() {
+            self.doBackToLobby();
+        };
+        var quitGame = function() {
+            self.doQuitGame();
+        };
 
         return (
             <div id="board">
                 <GameBoardStatus status={status}/>
+                <button className={lobbyButtonCssClasses} onClick={backToLobby}>Lobby</button>
+                <button className={quitButtonCssClasses} onClick={quitGame}>Quit</button>
 
                 <table>
                     <tr id="row1">

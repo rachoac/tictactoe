@@ -8,6 +8,7 @@ public enum GameState {
     init,
     running,
     stalemate,
-    won
+    won,
+    quit
 
 }

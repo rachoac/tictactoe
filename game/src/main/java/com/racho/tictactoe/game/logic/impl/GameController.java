@@ -35,7 +35,12 @@ public class GameController {
         if ( board == null ) {
             board = new TicTacToeBoard();
         }
-        board.deserialize((JSONObject) data.get("board"));
+        if ( data == null ) {
+            return;
+        }
+        if ( data.get("board") != null ) {
+            board.deserialize((JSONObject) data.get("board"));
+        }
         playerOne = (String) data.get("playerOne");
         playerTwo = (String) data.get("playerTwo");
         turnOwner = (String) data.get("turnOwner");

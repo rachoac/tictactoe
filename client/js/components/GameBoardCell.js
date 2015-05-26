@@ -17,7 +17,8 @@ export default class GameBoardCell extends React.Component {
         Emitter.on("game-state-changed", function(gameStatus) {
             var myTurn = Game.isMyTurn();
             self.setState({
-                myTurn : myTurn ? "true" : "false"
+                myTurn : myTurn ? "true" : "false",
+                winner : gameStatus.winner
             });
 
             var boardData = gameStatus.boardData;
@@ -26,8 +27,7 @@ export default class GameBoardCell extends React.Component {
             var cellPlayer = boardData[cellID];
             if ( cellPlayer ) {
                 // whose mark is it?
-                var symbol = Game.getSymbolForPlayer( cellPlayer );
-                this.state.player = symbol;
+                this.state.player = Game.getSymbolForPlayer(cellPlayer);
             }
 
         }.bind(this) );
@@ -37,7 +37,7 @@ export default class GameBoardCell extends React.Component {
     }
 
     doClick() {
-        if ( this.state.myTurn === 'true' ) {
+        if ( !this.state.winner && this.state.myTurn === 'true' ) {
             var mySymbol = Game.getMySymbol();
             this.state.player = mySymbol;
 

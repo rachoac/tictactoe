@@ -15,4 +15,6 @@ public interface Game {
     void performMove(String matchID, String player, int x, int y);
 
     GameStatus getMatchStatus(String matchID);
+
+    GameStatus stopMatch(String matchID);
 }

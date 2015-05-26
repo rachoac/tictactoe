@@ -20,6 +20,10 @@ public class GameDAOImpl implements GameDAO {
         matches.put(match.getMatchID(), match);
     }
 
+    public void updateMatch(Match match) {
+        matches.put(match.getMatchID(), match);
+    }
+
     public void saveGame(String matchID, JSONObject boardData) {
         matchBoards.put(matchID, boardData);
     }

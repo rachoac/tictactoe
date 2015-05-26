@@ -27,3 +27,7 @@
 .playerO {
     color: blue;
 }
+
+.hidden {
+    display: none;
+}

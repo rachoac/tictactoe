@@ -70,6 +70,15 @@ public class GameImpl implements Game {
         return status;
     }
 
+    @Override
+    public GameStatus stopMatch(String matchID) {
+        Match match = gameDAO.getMatch(matchID);
+        match.setState(MatchState.stopped);
+        gameDAO.updateMatch(match);
+
+        return getMatchStatus(matchID);
+    }
+
     private GameController getGameController(String matchID) {
         JSONObject gameData = gameDAO.getGame( matchID );
         GameController controller = new GameController();

@@ -12,6 +12,8 @@ public interface GameDAO {
 
     public void createMatch(Match match);
 
+    void updateMatch(Match match);
+
     public void saveGame(String matchID, JSONObject boardData);
 
     public JSONObject getGame(String matchID);

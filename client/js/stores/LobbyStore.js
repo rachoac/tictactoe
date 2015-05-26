@@ -71,6 +71,16 @@ var LobbyStore = function() {
                 this._performMove(payload.x, payload.y);
                 break;
             }
+
+            case "back-to-lobby" : {
+                this._backToLobby();
+                break;
+            }
+
+            case "quit-game" : {
+                this._quitGame();
+                break;
+            }
         }
 
     }.bind(this) );
@@ -203,7 +213,22 @@ var LobbyStore = function() {
                 // ? should we do anything
             }.bind(self)
         });
+    };
 
+    this._quitGame = function() {
+        var self = this;
+        $.ajax({
+            url: 'http://localhost:9092/game/match/' + Game.getMatchID(),
+            type: 'DELETE',
+            success: function(response) {
+                self._backToLobby();
+            }.bind(self)
+        });
+    };
+
+    this._backToLobby = function() {
+        Game.stop();
+        React.render(<Main />, document.getElementById('main'));
     };
 
     this._notify = function(players) {
