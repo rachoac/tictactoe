@@ -5,6 +5,9 @@ import $ from 'jquery';
 var Dispatcher = require('../Dispatcher');
 var Emitter = require('../Emitter');
 var Main = require('../components/Main.js');
+var Game = require('../Game');
+
+Game.reset();
 
 var LobbyStore = function() {
     Dispatcher.register( function(payload) {
@@ -53,8 +56,19 @@ var LobbyStore = function() {
                 this._activeChallengeResponse(true);
                 break;
             }
+
             case "active-challenge-reject" : {
                 this._activeChallengeResponse(false);
+                break;
+            }
+
+            case "update-game-state" : {
+                this._updateGameState();
+                break;
+            }
+
+            case "perform-move" : {
+                this._performMove(payload.x, payload.y);
                 break;
             }
         }
@@ -123,11 +137,11 @@ var LobbyStore = function() {
             $.get('http://localhost:9090/lobby/challenge/' + self.challenge.challengeID, function(challenge) {
                 if ( challenge.challengeStatus === 'accepted' ) {
                     self.challenge = undefined;
+                    Game.reset(challenge.matchID);
                     React.render(<Main visible='gameboard'/>, document.getElementById('main'));
                 }
                 if ( challenge.challengeStatus === 'rejected' || challenge.challengeExpired ) {
                     self._challengeCancel();
-                    return;
                 }
             }.bind(this))
             .fail(function() {
@@ -159,6 +173,7 @@ var LobbyStore = function() {
                 self.activeChallenge = undefined;
 
                 if ( response.challengeStatus == 'accepted' ) {
+                    Game.reset(response.matchID);
                     React.render(<Main visible='gameboard'/>, document.getElementById('main'));
                 }
 
@@ -169,6 +184,26 @@ var LobbyStore = function() {
 
             }.bind(self)
         });
+    };
+
+    this._updateGameState = function() {
+        $.get('http://localhost:9092/game/match/' + Game.getMatchID(), function(gameStatus) {
+            Game.setServerStatus(gameStatus);
+            Emitter.emit("game-state-changed", gameStatus);
+        }.bind(this));
+    };
+
+    this._performMove = function(x, y) {
+        var self = this;
+        $.ajax({
+            url: 'http://localhost:9092/game/match/' + Game.getMatchID() + '/move?player=' + self.getPlayer() + "&x=" + x + "&y=" + y,
+            type: 'PUT',
+            success: function(response) {
+                // todo
+                // ? should we do anything
+            }.bind(self)
+        });
+
     };
 
     this._notify = function(players) {
@@ -191,6 +226,11 @@ var LobbyStore = function() {
     this.getActiveChallenge =  function() {
         return self.activeChallenge;
     };
+
+    this.getMatchID = function() {
+        return self.matchID;
+    };
+
 };
 
 module.exports = new LobbyStore();

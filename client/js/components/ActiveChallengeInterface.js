@@ -23,7 +23,6 @@ export default class ActiveChallengeInterface extends React.Component {
                 console.log('Checking...');
                 Dispatcher.dispatch({ type: "active-challenge-status" });
             } else {
-                debugger;
                 clearInterval(self.daemon);
             }
         }, 1000);

@@ -27,6 +27,6 @@ public interface GameResource {
     Response performMove( @PathParam("matchID") String matchID, @QueryParam("player") String player, @QueryParam("x") int x, @QueryParam("y") int y);
 
     @GET
-    @Path("/match/{matchID}/status")
+    @Path("/match/{matchID}")
     Response getMatchStatus( @PathParam("matchID") String matchID);
 }

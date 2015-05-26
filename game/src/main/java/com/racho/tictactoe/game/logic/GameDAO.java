@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
  */
 public interface GameDAO {
 
+    public Match getMatch(String matchID);
+
     public void createMatch(Match match);
 
     public void saveGame(String matchID, JSONObject boardData);

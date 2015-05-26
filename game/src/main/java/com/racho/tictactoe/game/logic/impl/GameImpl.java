@@ -53,6 +53,8 @@ public class GameImpl implements Game {
 
     @Override
     public GameStatus getMatchStatus(String matchID) {
+        Match match = gameDAO.getMatch(matchID);
+
         GameController controller = getGameController(matchID);
         GameState state = controller.getState();
         String winner = controller.getWinner();
@@ -62,6 +64,8 @@ public class GameImpl implements Game {
         status.setState(state);
         status.setWinner(winner);
         status.setTurnOwner(turnOwner);
+        status.setMatch(match);
+        status.setBoardData((JSONObject) controller.getBoardData().get("board"));
 
         return status;
     }

@@ -24,6 +24,10 @@ public class GameDAOImpl implements GameDAO {
         matchBoards.put(matchID, boardData);
     }
 
+    public Match getMatch(String matchID) {
+        return matches.get(matchID);
+    }
+
     @Override
     public JSONObject getGame(String matchID) {
         return matchBoards.get(matchID);
