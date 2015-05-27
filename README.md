@@ -1,6 +1,6 @@
 # Tic Tac Toe
 
-## Build
+To try this out locally, build the two microservices, and the client.
 
 ### Services
 * Install the perequisites
