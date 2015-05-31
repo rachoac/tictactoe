@@ -1,6 +1,7 @@
 import React from 'react';
 import Flux from 'flux';
 import $ from 'jquery';
+import fetch from 'fetch-polyfill';
 
 var Dispatcher = require('../Dispatcher');
 var Emitter = require('../Emitter');

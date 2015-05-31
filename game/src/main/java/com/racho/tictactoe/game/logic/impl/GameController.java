@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.racho.tictactoe.game.logic.GameState;
 import org.json.simple.JSONObject;
 
+import java.util.List;
+
 public class GameController {
 
     private TicTacToeBoard board;
@@ -76,7 +78,7 @@ public class GameController {
         return turnOwner;
     }
 
-    public void doMove( int x, int y) {
+    public void doMove( int x, int y) throws IllegalMoveException {
         board.performMove(getTurnOwner(), x, y);
         nextTurn();
     }
@@ -87,6 +89,10 @@ public class GameController {
 
     public String getWinner() {
         return board.getWinner();
+    }
+
+    public List<String> getWinningCells() {
+        return board.getWinningCells();
     }
 
 }

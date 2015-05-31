@@ -37,10 +37,6 @@ export default class Main extends React.Component {
                         toShow = <ChallengeInterface/>;
                         break;
                     }
-                    case 'challenge' : {
-                        toShow = <ChallengeInterface/>;
-                        break;
-                    }
                     case 'gameboard' : {
                         toShow = <GameBoard/>;
                         break;

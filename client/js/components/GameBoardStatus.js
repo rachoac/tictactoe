@@ -15,6 +15,7 @@ export default class GameBoardStatus extends React.Component {
         var self = this;
 
         Emitter.on("game-state-changed", function(gameStatus) {
+            console.log(gameStatus);
             var myTurn = Game.isMyTurn();
             self.setState({
                 myTurn : myTurn ? "true" : "false",
@@ -34,7 +35,8 @@ export default class GameBoardStatus extends React.Component {
         } else if (this.state.winner ) {
             status = "GAME OVER! Winner: " + this.state.winner;
         } else {
-            status = this.state.myTurn ? ("true" === this.state.myTurn ? "Your turn" : "His turn") : "Calculating status...";
+            var symbol = Game.getSymbolForPlayer( require('../stores/LobbyStore').getPlayer() );
+            status = this.state.myTurn ? ("true" === this.state.myTurn ? "Your turn (" + symbol + ")!" : "His turn ... ") : "Calculating status...";
         }
 
         return (

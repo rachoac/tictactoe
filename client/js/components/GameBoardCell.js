@@ -30,6 +30,21 @@ export default class GameBoardCell extends React.Component {
                 this.state.player = Game.getSymbolForPlayer(cellPlayer);
             }
 
+            if ( gameStatus.winner ) {
+
+                for ( var i = 0; i < gameStatus.winningCells.length; i++ ) {
+                    var cell = gameStatus.winningCells[i];
+                    if ( cell === cellID ) {
+                        this.setState({
+                            selectable: false,
+                            won: true
+                        });
+                        break;
+                    }
+                }
+
+             }
+
         }.bind(this) );
     }
 
@@ -37,12 +52,32 @@ export default class GameBoardCell extends React.Component {
     }
 
     doClick() {
-        if ( !this.state.winner && this.state.myTurn === 'true' ) {
+        if ( !this.state.winner && this.state.myTurn === 'true' && !this.state.player ) {
             var mySymbol = Game.getMySymbol();
+            this.setState({
+                player: mySymbol
+            });
             this.state.player = mySymbol;
 
             Dispatcher.dispatch( { type: 'perform-move', x: this.props.x, y : this.props.y } );
         }
+    }
+
+    doHover() {
+        if ( !this.state.winner && this.state.myTurn === 'true' && !this.state.player ) {
+            var mySymbol = Game.getMySymbol();
+            this.setState({
+                selectable: true,
+                preview: mySymbol
+            })
+        }
+    }
+
+    doRemoveHover() {
+        this.setState({
+            selectable: false,
+            preview: ""
+        });
     }
 
     render() {
@@ -52,22 +87,23 @@ export default class GameBoardCell extends React.Component {
         var classes = {
             square : true,
             v : this.props.v,
-            h : this.props.h
+            h : this.props.h,
+            selectable : this.state.selectable,
+            won : this.state.won
         };
 
-        if ( this.state.player ) {
-            classes[' player' + this.state.player] = true;
-            player = this.state.player;
-        }
-
-        var click = function() {
-            self.doClick();
+        if ( this.state.player || this.state.preview ) {
+            classes[' player' + this.state.player || this.state.preview] = true;
+            player = this.state.player ? this.state.player : this.state.preview;
         }
 
         var className = cx(classes);
 
         return (
-            <td className={className} onClick={click}>{player}</td>
+            <td className={className}
+                onMouseOver={this.doHover.bind(this)}
+                onMouseOut={this.doRemoveHover.bind(this)}
+                onClick={this.doClick.bind(this)}>{player}</td>
         );
     }
 }

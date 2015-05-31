@@ -1,6 +1,7 @@
 package com.racho.tictactoe.game.logic;
 
 import com.racho.tictactoe.game.logic.impl.GameStatus;
+import com.racho.tictactoe.game.logic.impl.IllegalMoveException;
 import com.racho.tictactoe.game.logic.impl.Match;
 
 /**
@@ -12,7 +13,7 @@ public interface Game {
 
     String getMatchTurnOwner(String matchID);
 
-    void performMove(String matchID, String player, int x, int y);
+    void performMove(String matchID, String player, int x, int y) throws IllegalMoveException;
 
     GameStatus getMatchStatus(String matchID);
 

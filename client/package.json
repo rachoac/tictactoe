@@ -23,6 +23,10 @@
     "jquery": "^2.1.4",
     "events": "^1.0.2",
     "jquery-mobile": "^1.4.1",
-    "classnames": "^2.1.1"
+    "classnames": "^2.1.1",
+    "fetch-polyfill": "^0.8.1",
+    "node-fetch": "^1.2.1",
+    "react-native-cookies": "0.0.1",
+    "react-cookie": "^0.2.2"
   }
 }

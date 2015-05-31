@@ -2,6 +2,7 @@ package com.racho.tictactoe.game.service;
 
 import com.google.inject.Singleton;
 import com.racho.tictactoe.game.logic.Game;
+import com.racho.tictactoe.game.logic.impl.IllegalMoveException;
 import com.racho.tictactoe.game.logic.impl.Match;
 
 import javax.inject.Inject;
@@ -26,8 +27,12 @@ public class GameResourceImpl implements GameResource {
 
     @Override
     public Response performMove(String matchID, String player, int x, int y) {
-        game.performMove(matchID, player, x, y);
-        return Response.ok(game.getMatchStatus(matchID)).build();
+        try {
+            game.performMove(matchID, player, x, y);
+            return Response.ok(game.getMatchStatus(matchID)).build();
+        } catch ( IllegalMoveException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 
     @Override

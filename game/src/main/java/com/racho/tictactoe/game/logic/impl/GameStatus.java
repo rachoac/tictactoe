@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.racho.tictactoe.game.logic.GameState;
 import org.json.simple.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by aron on 5/21/15.
  */
@@ -12,6 +14,7 @@ public class GameStatus {
     private GameState state;
     private String winner;
     private String turnOwner;
+    private List<String> winningCells;
     private Match match;
     private JSONObject boardData;
 
@@ -57,5 +60,14 @@ public class GameStatus {
 
     public void setBoardData(JSONObject boardData) {
         this.boardData = boardData;
+    }
+
+    @JsonProperty
+    public List<String> getWinningCells() {
+        return winningCells;
+    }
+
+    public void setWinningCells(List<String> winningCells) {
+        this.winningCells = winningCells;
     }
 }

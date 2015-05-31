@@ -1,6 +1,7 @@
 import React from 'react';
 var Dispatcher = require('../Dispatcher');
 var Main = require('./Main.js');
+var Cookie = require('react-cookie');
 
 export default class JoinInterface extends React.Component {
     constructor(props) {
@@ -10,10 +11,12 @@ export default class JoinInterface extends React.Component {
     doSubmit() {
         var username = this.refs.username.getDOMNode().value;
         if ( username ) {
+            Cookie.save('username', username);
             Dispatcher.dispatch({ type: "join-player", playerName: username });
         } else {
             React.render(<Main visible='roster'/>, document.getElementById('main'));
         }
+
     }
 
     componentDidMount() {
@@ -25,18 +28,14 @@ export default class JoinInterface extends React.Component {
     }
 
     render() {
-        var self = this;
-        var submit = function() {
-            self.doSubmit();
-        };
 
         return (
             <div>
                 <span>Username</span>
                 <br/>
-                <input type='text' ref='username'/>
+                <input type='text' ref='username' defaultValue={Cookie.load('username')}/>
                 <br/>
-                <button onClick={submit}>Submit</button>
+                <button onClick={this.doSubmit.bind(this)}>Submit</button>
             </div>
         );
     }

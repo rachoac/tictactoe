@@ -7,6 +7,16 @@
     font-size: xx-large;
 }
 
+.selectable {
+    background-color: #0088bb;
+}
+.grey {
+    background-color: grey;
+}
+.won {
+    background-color: #33ccff;
+}
+
 .v{
     border-left:1px solid #000;
     border-right:1px solid #000;

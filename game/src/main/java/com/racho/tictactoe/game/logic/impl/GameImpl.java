@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by aron on 5/18/15.
@@ -34,7 +35,7 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void performMove(String matchID, String player, int x, int y) {
+    public void performMove(String matchID, String player, int x, int y) throws IllegalMoveException {
         GameController controller = getGameController(matchID);
         if ( controller.getTurnOwner().equals(player) ) {
             controller.doMove(x, y);
@@ -59,10 +60,12 @@ public class GameImpl implements Game {
         GameState state = controller.getState();
         String winner = controller.getWinner();
         String turnOwner = controller.getTurnOwner();
+        List<String> winningCells = controller.getWinningCells();
 
         GameStatus status = new GameStatus();
         status.setState(state);
         status.setWinner(winner);
+        status.setWinningCells(winningCells);
         status.setTurnOwner(turnOwner);
         status.setMatch(match);
         status.setBoardData((JSONObject) controller.getBoardData().get("board"));
