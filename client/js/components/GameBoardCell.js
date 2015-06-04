@@ -16,18 +16,16 @@ export default class GameBoardCell extends React.Component {
 
         Emitter.on("game-state-changed", function(gameStatus) {
             var myTurn = Game.isMyTurn();
-            self.setState({
-                myTurn : myTurn ? "true" : "false",
-                winner : gameStatus.winner
-            });
-
             var boardData = gameStatus.boardData;
-
             var cellID = self.props.x + '_' + self.props.y;
             var cellPlayer = boardData[cellID];
+            var partialState = {
+                myTurn: myTurn ? "true" : "false",
+                winner: gameStatus.winner
+            };
             if ( cellPlayer ) {
                 // whose mark is it?
-                this.state.player = Game.getSymbolForPlayer(cellPlayer);
+                partialState.player = Game.getSymbolForPlayer(cellPlayer);
             }
 
             if ( gameStatus.winner ) {
@@ -35,16 +33,15 @@ export default class GameBoardCell extends React.Component {
                 for ( var i = 0; i < gameStatus.winningCells.length; i++ ) {
                     var cell = gameStatus.winningCells[i];
                     if ( cell === cellID ) {
-                        this.setState({
-                            selectable: false,
-                            won: true
-                        });
+                        partialState.selectable = false;
+                        partialState.won = true;
                         break;
                     }
                 }
 
              }
 
+            self.setState(partialState);
         }.bind(this) );
     }
 

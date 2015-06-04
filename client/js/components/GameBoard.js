@@ -23,14 +23,14 @@ export default class ChallengeInterface extends React.Component {
         }, 1000);
 
         Emitter.on("game-state-changed", function(gameStatus) {
-            if ( gameStatus.winner ) {
+            if ( gameStatus.winner || (gameStatus.match && gameStatus.state === 'stalemate') ) {
                 // all done
                 console.log("Winner detected, killing state check daemon");
 
                 clearInterval( this.daemon );
                 self.setState( {
                     winner : gameStatus.winner,
-                    stopped : gameStatus.match && gameStatus.match.state === 'stopped'
+                    stopped : gameStatus.match && (gameStatus.match.state === 'stopped' || gameStatus.state === 'stalemate')
                 });
             }
         }.bind(this) );

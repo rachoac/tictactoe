@@ -1,10 +1,15 @@
+body {
+    margin: 30px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 .square{
     width:100px;
     height:100px;
 
     text-align: center;
     font-weight: bolder;
-    font-size: xx-large;
+    font-size: 4em;
 }
 
 .selectable {
@@ -40,4 +45,14 @@
 
 .hidden {
     display: none;
+}
+
+.cellButton {
+    width:100px;
+    height:100px;
+
+    /*background: transparent;*/
+    border: none !important;
+    font-size:0;
+    position: absolute;
 }

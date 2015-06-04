@@ -8,4 +8,3 @@ var Main = require('./components/Main.js');
 var LobbyStore = require('./stores/LobbyStore.js');
 
 React.render(<Main/>, document.getElementById('main'));
-
